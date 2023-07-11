@@ -5,10 +5,13 @@ import productService = require('../services/product.service');
 import { validate } from 'class-validator';
 import { AddCategoryDto, CreateProductDto } from '../dto/product.dto';
 import { HttpError } from '../services/product.service';
-``
+
 const multerStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, `C:/Final_Project/`);
+    cb(null, `C:/Users/waded/Documents/Final_Project/Client/public/images/`);
+    //C:/Final_Project/
+    //C:/Users/waded/Documents/Final_Project/Client/public/images/
+    ///media/dagimkennedy/Local Disk/Final_Project/Server/src/a
   },
   filename: (req, file, cb) => {
     const ext = file.mimetype.split('/')[1];
@@ -48,19 +51,18 @@ export async function CreateProduct(
   createProductDto.price = parseInt(req.body.price);
   createProductDto.expiry_date = req.body.expiry_date;
   createProductDto.quantity = parseInt(req.body.quantity);
- // createProductDto.image = req.body.image;
-  createProductDto.category =  parseInt(req.body.category);
+  createProductDto.image = req.body.image;
+  createProductDto.category = parseInt(req.body.category);
 
   validate(createProductDto).then((errors) => {
     // errors is an array of validation errors
     if (errors.length > 0) {
       //   console.log(errors[0].constraints);
-       res.status(404).json({
+      res.status(404).json({
         message: errors[0].constraints,
       });
     } else {
-
-      productService.CreateProduct(createProductDto,res);
+      productService.CreateProduct(createProductDto, res);
       //  res.status(200).json({
       //   message: 'Products Created Successfully!',
       // });
@@ -92,23 +94,71 @@ export async function AddCategory(
   });
 }
 
-export async function getProducts(req : Request, res: Response, next:NextFunction){
-  res.status(200).json(await productService.getProducts())
+export async function getProducts(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  res.status(200).json(await productService.getProducts());
 }
 
-
-export async function getCategories(req:Request, res: Response, next:NextFunction){
-  res.status(200).json(await productService.getCategories())
+export async function getCategories(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  res.status(200).json(await productService.getCategories());
 }
 
-export async function getProductsByCategory(req:Request, res: Response, next: NextFunction){
-  let categoryID:string = req.params.categoryID;
-  let checkCategory = await productService.CheckCategory(categoryID,res);
-  if(checkCategory){
-    res.status(200).json(await productService.getProductsByCategory(categoryID))
+export async function getProductById(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  let productID: number = parseInt(req.params.productID);
+  res.status(200).json(await productService.getProductById(productID));
+}
+
+export async function checkValidation(req:Request, res:Response, next: NextFunction){
+  res.status(200).json('hello')
+}
+
+export async function searchProducts(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  const { search }: string = req.query as any;
+  if (search.toString() == '') {
+    return res.status(404).json({ message: 'page not found' });
   }
-  else {
-    res.status(404).json({status : 'failure' ,message : 'No such Category!'})
+  res.status(200).json(await productService.searchProducts(search.toString()));
+}
+
+export async function getProductsByCategory(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  let categoryID: string = req.params.categoryID;
+  let checkCategory = await productService.CheckCategory(categoryID, res);
+  if (checkCategory) {
+    res
+      .status(200)
+      .json(await productService.getProductsByCategory(categoryID));
+  } else {
+    res.status(404).json({ status: 'failure', message: 'No such Category!' });
   }
- 
+}
+
+export async function numberOfCustomers(req: Request, res: Response, next: NextFunction){
+  res.status(200).json({msg : await productService.numberOfCustomers()})
+}
+
+export async function numberOfOrders(req:Request, res:Response, next:NextFunction){
+  res.status(200).json({msg: await productService.numberOfOrders()})
+}
+
+export async function numberOfProducts(req: Request, res: Response, next: NextFunction){
+  res.status(200).json({msg : await productService.numberOfProducts()}) 
 }

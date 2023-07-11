@@ -7,6 +7,9 @@ import { dispatcherAuthRouter } from './Dispatcher/routes/dispatcher-auth.route'
 import { productRouter } from './Product/routes/product.route';
 import { NextFunction, Request, Response } from 'express';
 import { HttpError } from './Product/services/product.service';
+import { orderRouter } from './Order/routes/order.route';
+import { assistantRouter } from './Assistant/routes/assistant.route';
+import { taskRouter } from './Task/routes/task.routes';
 
 const app = express();
 app.use(
@@ -17,6 +20,7 @@ app.use(
     allowedHeaders: '*',
   })
 );
+
 const server = http.createServer(app);
 app.use(express.json());
 
@@ -28,7 +32,11 @@ AppDataSource.initialize()
 
 app.use('/api/customer', authRouter);
 app.use('/api/dispatcher', dispatcherAuthRouter);
+app.use('/api/assistant', assistantRouter);
 app.use('/api/product', productRouter);
+app.use('/api/orders', orderRouter);
+app.use('/api/task', taskRouter);
+
 //global exception handling route
 app.use((err: HttpError, req: Request, res: Response, next: NextFunction) => {
   const errorStatus = err.statusCode || 400;
@@ -40,6 +48,6 @@ app.use((err: HttpError, req: Request, res: Response, next: NextFunction) => {
   });
 });
 
-server.listen(7000, () => {
+server.listen(5000, () => {
   console.log('Server started successfully');
 });

@@ -1,9 +1,17 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  BaseEntity,
+  OneToMany,
+  JoinColumn,
+} from 'typeorm';
+import { Task } from './task.model';
 
 @Entity({ name: 'dispatcher' })
 export class Dispatcher extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
-  id: number;
+  id: string;
 
   @Column()
   firstName: string;

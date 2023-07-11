@@ -1,35 +1,43 @@
-export enum statusMessage{
-    not_picked_up="not picked up",
-    ready_to_pick = "ready to pick",
-    picked_up = "picked_up",
+import {
+  PrimaryGeneratedColumn,
+  BaseEntity,
+  Entity,
+  Column,
+  JoinColumn,
+  OneToMany,
+  ManyToOne,
+} from 'typeorm';
+
+import { Customer } from './customer.model';
+import { Order_item } from './order_item.model';
+
+export enum statusMessage {
+  not_picked_up = 'not_picked_up',
+  ready_to_pick = 'ready_to_pick',
+  picked_up = 'picked_up',
+}
+export enum paymentStatusMessage {
+  paid = 'paid',
+  not_paid = 'not_paid',
 }
 
-import { 
-    PrimaryGeneratedColumn, 
-    BaseEntity, 
-    Entity, 
-    Column, 
-    OneToOne,
-    JoinColumn,
-    OneToMany
-} from "typeorm";
-
-import { Customer } from "./customer.model";
-import { Order_item } from "./order_item.model";
-
-@Entity({name : 'order'})
+@Entity({ name: 'order' })
 export class Order extends BaseEntity {
-    @PrimaryGeneratedColumn()
-    id : number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-    @OneToOne(() => Customer)
-    @JoinColumn()
-    customer : Customer;
+  @ManyToOne(() => Customer, (customer) => customer.order)
+  @JoinColumn({
+    name: 'customer',
+  })
+  customer: Customer;
 
-    @Column({default : statusMessage.not_picked_up})
-    status : string;
+  @Column({ default: paymentStatusMessage.not_paid })
+  payment_status: string;
 
-    @OneToMany(() => Order_item, order_item => order_item.order)
-    order_item: Order_item[]
+  @Column({ default: statusMessage.not_picked_up })
+  status: string;
 
+  @OneToMany(() => Order_item, (order_item) => order_item.order)
+  order_item: Order_item[];
 }

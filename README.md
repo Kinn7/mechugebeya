@@ -1,4 +1,4 @@
-# Ecommerce App
+# Final_Project
 
 Packages to be installed
 node

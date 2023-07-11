@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 export const productApi = createApi({
     reducerPath : 'productApi',
     baseQuery : fetchBaseQuery({ 
-        baseUrl : 'http://localhost:7000/api/product' 
+        baseUrl : 'http://localhost:5000/api/product' 
     }),
     endpoints : (builder) => ({
         getProducts : builder.query({
@@ -14,9 +14,15 @@ export const productApi = createApi({
         }),
         getProductsByCategory : builder.query({
             query: (categoryID) => `/getProductsByCategory/${categoryID}`
+        }),
+        searchProducts : builder.query({
+            query: (search) => `/searchProducts?search=${search}`
+        }),
+        getProductById : builder.query({
+            query: (productId) => `/getProductById/${productId}`
         })
 //        /getProductsByCategory/:categoryID
     })
 })
 
-export const { useGetProductsQuery , useGetCategoryQuery, useGetProductsByCategoryQuery } = productApi
+export const { useGetProductsQuery , useGetCategoryQuery, useGetProductsByCategoryQuery, useSearchProductsQuery, useGetProductByIdQuery } = productApi

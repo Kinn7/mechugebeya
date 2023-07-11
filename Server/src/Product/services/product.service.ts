@@ -1,4 +1,5 @@
 require('dotenv').config();
+import { Like } from 'typeorm';
 import 'reflect-metadata';
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
@@ -11,6 +12,8 @@ import {
   CreateProductInterface,
 } from '../../utils/products.interface';
 import { Category } from '../../models/category.model';
+import { Customer } from '../../models/customer.model';
+import { Order } from '../../models/order.model';
 export class HttpError extends Error {
   statusCode: number;
 
@@ -22,6 +25,8 @@ export class HttpError extends Error {
 
 const productRepository = AppDataSource.getRepository(Product);
 const categoryRepository = AppDataSource.getRepository(Category);
+const customerRepository = AppDataSource.getRepository(Customer)
+const orderRepository = AppDataSource.getRepository(Order)
 
 //checking if the category exists
 export const CheckCategory = async(categoryID:string,res : Response) =>{
@@ -40,7 +45,7 @@ export const CheckCategory = async(categoryID:string,res : Response) =>{
   else {
     return checkCategory;
   }
-
+ 
 }
 //product creation
 export const CreateProduct = async (
@@ -103,6 +108,15 @@ export const getProducts = async() => {
   return productList;
 }
 
+export const getProductById = async(productID:number) => {
+  let singleProduct = await productRepository.find({
+    where : {
+      id : productID
+    }
+  })
+  return singleProduct
+}
+
 export const getCategories = async() => {
   let categoryList = await categoryRepository.find({
     select : {
@@ -111,6 +125,15 @@ export const getCategories = async() => {
     }
   })
   return categoryList;
+}
+
+export const searchProducts = async(products:string) => {
+  let product = await productRepository.find({
+    where : {
+      name : Like(`${products}%`)
+    }
+  })
+  return product;
 }
 
 export const getProductsByCategory = async(category:string) => {
@@ -122,4 +145,19 @@ export const getProductsByCategory = async(category:string) => {
   }
  })  
  return productLists; 
+}
+
+export const numberOfCustomers = async() => {
+  let noOfCustomer = await customerRepository.count()
+  return noOfCustomer
+}
+
+export const numberOfOrders = async() => {
+  let noOfOrders = await orderRepository.count()
+  return noOfOrders
+}
+
+export const numberOfProducts = async() => {
+  let noOfProducts = await productRepository.count()
+  return noOfProducts 
 }

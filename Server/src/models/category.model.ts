@@ -5,6 +5,7 @@ import {
   BaseEntity,
   OneToMany,
   ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 import { Product } from './product.model';
 
@@ -16,11 +17,9 @@ export class Category extends BaseEntity {
   @Column()
   name: string;
 
-
-
   // @ManyToOne(() => Product, (product) => product.categoryID)
   // product: Product;
-  @OneToMany(() => Product, (product) => product.category )
-    categoryId : Category[];
-  
+  @OneToMany(() => Product, (product) => product.category)
+  @JoinColumn()
+  products: Product[];
 }

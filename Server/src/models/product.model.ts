@@ -30,20 +30,11 @@ export class Product extends BaseEntity {
   @Column()
   image: string;
 
-  // @OneToMany(() => Category, (category) => category.product, {
-  //   onDelete: 'CASCADE',
-  // })
-  // @JoinColumn({
-  //   name: 'id',
-  // })
-  // categoryID: Category[];
-  @ManyToOne(() => Category, category => category.categoryId, {
-    onDelete: 'CASCADE'
-  } )
-  category : Category;
-
+  @ManyToOne(() => Category, (category) => category.products, {
+    onDelete: 'CASCADE',
+  })
+  category: Category;
 
   @OneToMany(() => Order_item, (order_item) => order_item.product)
   order_item: Order_item[];
-
 }

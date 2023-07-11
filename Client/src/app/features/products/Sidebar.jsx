@@ -1,17 +1,25 @@
-import { Box, Card, Flex, Spacer, Text, VStack } from "@chakra-ui/react";
-import { FaHome, FaUsers, FaCog } from "react-icons/fa";
-import { useGetCategoryQuery,useGetProductsByCategoryQuery } from "../../api/productApi";
+import { Box,  Flex, Spacer, Text, VStack } from "@chakra-ui/react";
+import { useGetCategoryQuery,useGetProductsQuery,useSearchProductsQuery} from "../../api/productApi";
 import { useDispatch } from "react-redux";
 import { getCategoryId } from "./productsSlice";
+import { searchProduct2 } from "./productsSlice2";
 
 export default function Sidebar() {
 
-  const dispatch = useDispatch()
+const dispatch = useDispatch()
+
+
 
   function handleClick(arg){
+    dispatch(
+      searchProduct2({
+        id: 0,
+      })
+    );
     dispatch(getCategoryId({
       id : arg
     }))
+
   }
 
   const { data: categories, isLoading, isSuccess, isError, error} = useGetCategoryQuery()
@@ -21,9 +29,9 @@ export default function Sidebar() {
   }else if(isSuccess){
     listCategory = categories.map((category,id) => {
       return (
-        <Box  onClick={() => {handleClick(category.id ? category.id : 0)}} key={id} py="0" _hover={{ bg: "gray.200" }} borderRadius="md">
+        <Box  onClick={() => {handleClick(category.id )}} key={id} py="0" _hover={{ bg: "gray.200" }} borderRadius="md">
         <Flex align="center">
-          <Text ml="2" >{category.name}</Text>
+          <Text fontSize="md" fontWeight="semibold" ml="2" >{category.name}</Text>
         </Flex>
       </Box>
       )
@@ -40,11 +48,11 @@ export default function Sidebar() {
         <Spacer />
       </Flex>
       <VStack spacing="4" align="stretch" mt="4" px="4">
-        <Box py="2" bg="gray.200" borderRadius="md">
+        {/* <Box py="5" bg="gray.200" borderRadius="md">
           <Text fontSize="md" fontWeight="semibold">
             Navigation
           </Text>
-        </Box>
+        </Box> */}
 
         {listCategory}
 

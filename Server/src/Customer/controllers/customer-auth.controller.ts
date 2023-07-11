@@ -1,9 +1,9 @@
-import { NextFunction, Request, Response } from 'express';
-import { SignInDto, SignUpDto } from '../dto/customer-auth.dto';
-import customerAuthService = require('../services/customer-auth.service');
+import { NextFunction, Request, Response } from "express";
+import { SignInDto, SignUpDto } from "../dto/customer-auth.dto";
+import customerAuthService = require("../services/customer-auth.service");
 //import { Request, Response, NextFunction } from 'express';
-import * as bcrypt from 'bcrypt';
-import { validate, validateOrReject } from 'class-validator';
+import * as bcrypt from "bcrypt";
+import { validate, validateOrReject } from "class-validator";
 
 export async function CustomerSignUp(
   req: Request,
@@ -29,11 +29,12 @@ export async function CustomerSignUp(
     } else {
       customerAuthService.sign_up(signUpDto);
       res.status(200).json({
-        message: 'Account Created Successfully!',
+        message: "Account Created Successfully!",
       });
     }
   });
 }
+
 export async function CustomerSignin(
   req: Request,
   res: Response,

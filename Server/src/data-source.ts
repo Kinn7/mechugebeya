@@ -6,6 +6,8 @@ import { Category } from './models/category.model';
 import { Dispatcher } from './models/dispatcher.model';
 import { Order } from './models/order.model';
 import { Order_item } from './models/order_item.model';
+import { Assistant } from './models/assistant.model';
+import { Task } from './models/task.model';
 
 export const AppDataSource = new DataSource({
   type: 'mysql',
@@ -16,7 +18,16 @@ export const AppDataSource = new DataSource({
   database: 'mechugebeya',
   synchronize: true,
   logging: false,
-  entities: [Customer, Product, Category, Dispatcher, Order, Order_item],
+  entities: [
+    Customer,
+    Product,
+    Category,
+    Dispatcher,
+    Order,
+    Order_item,
+    Assistant,
+    Task,
+  ],
   migrations: [],
   subscribers: [],
 });

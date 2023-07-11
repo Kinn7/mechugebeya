@@ -14,12 +14,15 @@ export const productsSlice = createSlice({
         getCategoryId : (state,action) => {
 //            state.products.push(action.payload)
               state.products = action.payload ;
+        },
+        searchProduct : (state,action) => {
+            state.products = action.payload ;
         }
     }
 })
 
 
-export const { getProducts , getCategoryId } = productsSlice.actions
+export const { getProducts , getCategoryId, searchProduct } = productsSlice.actions
 
 export const productsAll =  (state) => state.products.products
 
